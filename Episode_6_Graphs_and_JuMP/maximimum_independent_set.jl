@@ -5,7 +5,7 @@ using GraphPlot
 using GraphIO
 
 
-function maximum_independent_set(graph::SimpleGraph{Int64}; show_model = false)
+function maximum_independent_set(graph; show_model = false)
     model = Model(GLPK.Optimizer)
     @variable(model, x[1:Graphs.nv(graph)], Bin)
     @objective(model, Max, sum(x))
@@ -15,11 +15,11 @@ function maximum_independent_set(graph::SimpleGraph{Int64}; show_model = false)
         # functions, respectively. 
         @constraint(model, x[Graphs.src(e)] + x[Graphs.dst(e)] <= 1)
     end
-    optimize!(model)
+    JuMP.optimize!(model)
     if show_model
         println(model)
     end
-    return [xi for xi in x if value(xi) == 1.0]
+    return [xi for xi in x if JuMP.value(xi) == 1.0]
 end
 
 # Read in the Petersen graph edge list text file 
