@@ -10,8 +10,9 @@ function maximum_independent_set(graph::SimpleGraph{Int64}; show_model = false)
     @variable(model, x[1:Graphs.nv(graph)], Bin)
     @objective(model, Max, sum(x))
     for e in Graphs.edges(graph)
-        # To access the first and second edge from Graphs.edges(graph)
-        # you must call the src and dst functions, respectively. 
+        # To access the first and second vertec from each edge in
+        # from Graphs.edges(graph) you must call the src and dst 
+        # functions, respectively. 
         @constraint(model, x[Graphs.src(e)] + x[Graphs.dst(e)] <= 1)
     end
     optimize!(model)
