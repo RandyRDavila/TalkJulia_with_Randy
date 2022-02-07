@@ -9,7 +9,7 @@ function maximum_independent_set(graph::SimpleGraph{Int64}; show_model = false)
     model = Model(GLPK.Optimizer)
     @variable(model, x[1:Graphs.nv(graph)], Bin)
     @objective(model, Max, sum(x))
-    for (i, e) in enumerate(Graphs.edges(graph))
+    for e in Graphs.edges(graph)
         @constraint(model, x[Graphs.src(e)] + x[Graphs.dst(e)] <= 1)
     end
     optimize!(model)
